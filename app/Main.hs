@@ -15,14 +15,14 @@ import Picross
 
 --------------------------------------------------------------------------------
 
--- | `renderRow` @cellWidth @rowWidth @row renders the @row where each cell
--- has a width represented by @cellWidth and the first column has a width of
--- @rowWidth.
+-- | `renderRow` @cellWidth rowWidth row@ renders the @row where each cell
+-- has a width represented by @cellWidth@ and the first column has a width of
+-- @rowWidth@.
 renderRow :: Int -> Int -> (String, [Int]) -> String
 renderRow cw rw (l,r) = intercalate " | " (pad rw l : showRow cw r)
 
--- | `render` @solution @state renders the current @state of the game for
--- an image represented by @solution.
+-- | `render` @solution state@ renders the current @state@ of the game for
+-- an image represented by @solution@.
 render :: [[Int]] -> [[Int]] -> String
 render img sol = fr ++ "\n" ++ replicate (length fr) '-' ++ "\n" ++
              intercalate "\n" (map (renderRow cw rw) (zip rl sol))
@@ -34,8 +34,8 @@ render img sol = fr ++ "\n" ++ replicate (length fr) '-' ++ "\n" ++
           cw = maximum [length l | l <- cl]
           fr = intercalate " | " (pad rw "" : [pad cw l | l <- cl])
 
--- | `loop` @solution @state represents the main game loop. @solution is the
--- final image, while @state is the current image that has been solved so far.
+-- | `loop` @solution state@ represents the main game loop. @solution@ is the
+-- final image, while @state@ is the current image that has been solved so far.
 loop :: [[Int]] -> [[Int]] -> IO ()
 loop pic sol = do
     -- render the current state of the game
