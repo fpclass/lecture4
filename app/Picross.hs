@@ -5,7 +5,7 @@
 
 module Picross where
 
-import Data.List (intersperse, transpose, group)
+import Data.List (intersperse, transpose, group, intercalate)
 
 --------------------------------------------------------------------------------
 
@@ -26,17 +26,17 @@ sequences xs = [length ys | ys <- group xs, head ys /= 0]
 
 -- | `rows` @rows@ calculates the sequence lengths for the @rows@ of an image.
 rows :: [[Int]] -> [[Int]]
-rows img = [sequences row | row <- img]
+rows = map sequences
 
 -- | `columns` @columns@ calculates the sequence lengths for the @columns@
 -- of an image.
 columns :: [[Int]] -> [[Int]]
-columns img = [sequences column | column <- transpose img]
+columns = map sequences . transpose
 
 -- | `makeBlank` @img@ replaces all cells in @img@ with blank ones (i.e. ones
 -- that have not been guessed yet)
 makeBlank :: [[Int]] -> [[Int]]
-makeBlank img = [[-1 | column <- row] | row <- img]
+makeBlank = map (map (const (-1)))
 
 -- | `symbol` @cell@ maps @cell@ to a corresponding character symbol.
 symbol :: Int -> Char
@@ -51,7 +51,7 @@ showCell w c = replicate w (symbol c)
 -- | `showRow` @width row@ renders @row@ so that every cell has a width of
 -- @width@.
 showRow :: Int -> [Int] -> [String]
-showRow w row = [showCell w c | c <- row]
+showRow w = map (showCell w)
 
 -- | `pad` @n str@ pads @str@ to a length of @n@ with spaces at the end.
 pad :: Int -> String -> String
@@ -59,11 +59,11 @@ pad n xs = xs ++ replicate (n - length xs) ' '
 
 -- | `showLabel` @label@ renders @label@ as a string.
 showLabel :: [Int] -> String
-showLabel ls = concat (intersperse "," [show l | l <- ls])
+showLabel = intercalate ","  . map show
 
 -- | `showLabels` @labels@ renders @labels@ as strings.
 showLabels :: [[Int]] -> [String]
-showLabels ls = [showLabel l | l <- ls]
+showLabels = map showLabel
 
 -- | `testCell` @pos type image@ tests whether @image@ contains a cell whose
 -- value is @type@ in the position represented by @pos@.
