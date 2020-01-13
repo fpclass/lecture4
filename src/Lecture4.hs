@@ -5,6 +5,8 @@
 
 module Lecture4 where
 
+import Prelude hiding (splitAt)
+
 --------------------------------------------------------------------------------
 -- Lists
 
